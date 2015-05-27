@@ -1,5 +1,5 @@
 window.onload = function() {
- cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
+ /* cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
  cast.receiver.logger.setLevelValue(0);
  window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
  console.log('Starting Receiver Manager');
@@ -17,7 +17,7 @@ window.onload = function() {
     // inform all senders on the CastMessageBus of the incoming message event
     // sender message listener will be invoked
 
-    /*var arrayOfProducts = mapJsonStringToIzettleProduct(getDummyJsonString());*/
+    var arrayOfProducts = mapJsonStringToIzettleProduct(getDummyJsonString());
     var arrayOfProducts = $.parseJSON(event.data).products;
     initListWithArrayOfProducts(arrayOfProducts);
 
@@ -29,11 +29,19 @@ window.onload = function() {
 
   // initialize the CastReceiverManager with an application status message
   window.castReceiverManager.start({statusText: "Application is starting"});
-  console.log('Receiver Manager started');
+  console.log('Receiver Manager started'); */
 
   //For testing internally
-  /*var arrayOfProducts = mapJsonStringToIzettleProduct(getDummyJsonString());
-  initListWithArrayOfProducts(arrayOfProducts);*/
+  var arrayOfProducts = mapJsonStringToIzettleProduct(getDummyJsonString());
+  initListWithArrayOfProducts(arrayOfProducts, 1);
+  showPage(arrayOfProducts, 2);
+
+  $('.product_list')
+  .delay('3000')
+  .queue(function() {
+    console.log("ShowPage");
+    showPage(arrayOfProducts, 1);
+  });
 };
 
 // utility function to display the text message in the input field
@@ -44,35 +52,73 @@ function displayText(text) {
   window.castReceiverManager.setApplicationState(text);
 };
 
-function initListWithArrayOfProducts(arrayOfProducts) {
-  var cList = $('ul.product_list')
+function showPage(arrayOfProducts, showPage) {
+  console.log("ShowPage called " + showPage);
+
+  $('.product_list')
+  .delay('400')
+  .slideUp('500', function() {
+    console.log("Remove");
+    $('.product_list_item').detach();
+    initListWithArrayOfProducts(arrayOfProducts, showPage);
+  })
+  .slideDown('500', function() {
+    console.log("add");
+  });
+
+}
+
+function initListWithArrayOfProducts(arrayOfProducts, page) {
+  var cList = $('.product_list')
   $.each(arrayOfProducts, function(i) {
 
-    var li = $('<li/>')
-    .addClass('product_list_item')
-    .appendTo(cList);
+    //This is some horrible math
+    i = (page * 7 - 7) + i;
 
-    var container = $('<div />')
-    .addClass('container')
-    .appendTo(li)
+    if (i < 7*page && arrayOfProducts[i] != null) {
 
-    var imgWrapper = $('<div/>')
-    .addClass('imgWrapper')
-    .appendTo(container);
+      console.log("ProductName " + arrayOfProducts[i].productName);
 
-    var imageList = $('<img/>')
-    .attr({'src': arrayOfProducts[i].imageUrl})
-    .appendTo(imgWrapper);
+      var li = $('<li/>')
+      .addClass('product_list_item')
+      .appendTo(cList);
 
-    var titleList = $('<span/>')
-    .addClass('product_title')
-    .text(arrayOfProducts[i].productName)
-    .appendTo(container);
+      var container = $('<div />')
+      .addClass('container')
+      .appendTo(li)
 
-    var priceList = $('<span/>')
-    .addClass('product_price')
-    .text(arrayOfProducts[i].productPrice)
-    .appendTo(container);
+      var imgWrapper = $('<div/>')
+      .addClass('imgWrapper')
+      .appendTo(container);
+
+      var imageList = $('<img/>')
+      .attr({'src': arrayOfProducts[i].imageUrl})
+      .appendTo(imgWrapper);
+
+      if (arrayOfProducts[i].variantName.trim() != null && arrayOfProducts[i].variantName.trim()) {
+        var titleList = $('<span/>')
+        .addClass('product_title_with_variant')
+        .text(arrayOfProducts[i].productName)
+        .appendTo(container);
+
+        var variantName = $("<span/>")
+        .addClass('variantName')
+        .text(arrayOfProducts[i].variantName)
+        .appendTo(container);
+
+      } else {
+        var titleList = $('<span/>')
+        .addClass('product_title')
+        .text(arrayOfProducts[i].productName)
+        .appendTo(container);
+      }
+
+      var priceList = $('<span/>')
+      .addClass('product_price')
+      .text(arrayOfProducts[i].productPrice)
+      .appendTo(container);
+
+    }
   });
 }
 

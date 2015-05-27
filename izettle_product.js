@@ -31,16 +31,27 @@ function getDummyJsonString () {
 			\"productName\":\"Vegetarian burger\", \"variantName\":\"\", \"productPrice\":\"SEK 32\" 
 		}
 
-	]}";*/
+		]}";*/
 
-	var textJson = '{"products" : [	{"imageUrl":"http://aht.seriouseats.com/images/2012/04/20120427-bk-japan-ringo-burger-product-shot.jpg","productName":"Hamburger", "variantName":"", "productPrice":"SEK 21"}, {"imageUrl":"http://www.citycharcoalgrill.com/wp-content/uploads/Vegi-Burger.jpg","productName":"Vegetarian burger", "variantName":"", "productPrice":"SEK 32"}]}';
+		var textJson = 
+		'{"products" : ['
+		+ '{"imageUrl":"http://aht.seriouseats.com/images/2012/04/20120427-bk-japan-ringo-burger-product-shot.jpg","productName":"Hamburger", "variantName":"", "productPrice":"SEK 21"},' 
+		+ '{"imageUrl":"http://www.citycharcoalgrill.com/wp-content/uploads/Vegi-Burger.jpg","productName":"Vegetarian burger", "variantName":"", "productPrice":"SEK 32"},' 
+		+ '{"imageUrl":"http://hostedmedia.reimanpub.com/TOH/Images/Photos/37/300x300/exps28800_UGG143377D12_18_1b.jpg","productName":"Awesome Hamburger", "variantName":"Extra cheese", "productPrice":"SEK 55"},'
+		+ '{"imageUrl":"http://aht.seriouseats.com/images/2012/04/20120427-bk-japan-ringo-burger-product-shot.jpg","productName":"Hamburger", "variantName":"", "productPrice":"SEK 21"},' 
+		+ '{"imageUrl":"http://www.citycharcoalgrill.com/wp-content/uploads/Vegi-Burger.jpg","productName":"Vegetarian burger", "variantName":"", "productPrice":"SEK 32"},' 
+		+ '{"imageUrl":"http://hostedmedia.reimanpub.com/TOH/Images/Photos/37/300x300/exps28800_UGG143377D12_18_1b.jpg","productName":"Awesome Hamburger", "variantName":"Extra cheese", "productPrice":"SEK 55"},'
+		+ '{"imageUrl":"http://aht.seriouseats.com/images/2012/04/20120427-bk-japan-ringo-burger-product-shot.jpg","productName":"Hamburger", "variantName":"", "productPrice":"SEK 21"},' 
+		+ '{"imageUrl":"http://www.citycharcoalgrill.com/wp-content/uploads/Vegi-Burger.jpg","productName":"Vegetarian burger", "variantName":"", "productPrice":"SEK 32"},' 
+		+ '{"imageUrl":"http://hostedmedia.reimanpub.com/TOH/Images/Photos/37/300x300/exps28800_UGG143377D12_18_1b.jpg","productName":"Awesome Hamburger", "variantName":"Extra cheese", "productPrice":"SEK 55"}'
+		+ ']}';
 
-	console.log("text: " + textJson);
-	return textJson;
-}
+		console.log("text: " + textJson);
+		return textJson;
+	}
 
-function mapJsonStringToIzettleProduct(jsonString) {
-	var obj = $.parseJSON(jsonString);
-	return obj.products;
-	
-}
+	function mapJsonStringToIzettleProduct(jsonString) {
+		var obj = $.parseJSON(jsonString);
+		return obj.products;
+		
+	}

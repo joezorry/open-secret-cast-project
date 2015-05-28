@@ -18,35 +18,34 @@ window.onload = function() {
     // sender message listener will be invoked
 
     var arrayOfProducts = $.parseJSON(event.data).products;
-    
-    var numberOfPages = arrayOfProducts.length % 7;
-    console.log("numberOfPages " + numberOfPages);
-    initListWithArrayOfProducts(arrayOfProducts, 1);
-    if (numberOfPages <= 2) {
-      showPage(arrayOfProducts, 2);
-    }
+    setupList(arrayOfProducts);
 
     window.messageBus.send(event.senderId, event.data);
   }
 
   // initialize the CastReceiverManager with an application status message
   window.castReceiverManager.start({statusText: "Application is starting"});
-  console.log('Receiver Manager started');
-
-  /*
+  console.log('Receiver Manager started'); 
 
   //For testing internally
-  var arrayOfProducts = mapJsonStringToIzettleProduct(getDummyJsonString());
-  
-  var numberOfPages = arrayOfProducts.length % 7;
-  console.log("numberOfPages " + numberOfPages);
-  initListWithArrayOfProducts(arrayOfProducts, 1);
-  showPage(arrayOfProducts, 2); */
+  //var arrayOfProducts = $.parseJSON(getDummyJsonString()).products;
+  //setupList(arrayOfProducts);
 };
+
+var MAX_NUM_OF_PRODUCTS_ON_ONE_PAGE = 6;
 
 var currentPage = 1;
 var numberOfPages = 0;
 var arrayOfProducts;
+
+function setupList(arrayOfProducts) {
+  var numberOfPages = (arrayOfProducts.length - 1) % MAX_NUM_OF_PRODUCTS_ON_ONE_PAGE;
+  console.log("numberOfPages " + numberOfPages);
+  initListWithArrayOfProducts(arrayOfProducts, 1);
+  if (numberOfPages <= 2) {
+    showPage(arrayOfProducts, 2);
+  }
+}
 
 // utility function to display the text message in the input field
 function displayText(text) {
@@ -87,9 +86,11 @@ function initListWithArrayOfProducts(arrayOfProducts, page) {
   $.each(arrayOfProducts, function(i) {
 
     //This is some horrible math
-    i = (page * 7 - 7) + i;
+    i = (page * MAX_NUM_OF_PRODUCTS_ON_ONE_PAGE - MAX_NUM_OF_PRODUCTS_ON_ONE_PAGE) + i;
 
-    if (i < 7*page && arrayOfProducts[i] != null) {
+    if (i < MAX_NUM_OF_PRODUCTS_ON_ONE_PAGE * page && arrayOfProducts[i] != null) {
+
+      var product = arrayOfProducts[i];
 
       console.log("ProductName " + arrayOfProducts[i].productName);
 
@@ -105,35 +106,100 @@ function initListWithArrayOfProducts(arrayOfProducts, page) {
       .addClass('imgWrapper')
       .appendTo(container);
 
-      var imageList = $('<img/>')
-      .attr({'src': arrayOfProducts[i].imageUrl})
-      .appendTo(imgWrapper);
+      if("FOLDER" == product.productType) {
+        var imageList = $('<img/>')
+        .attr({'src': product.childProducts[0].imageUrl})
+        .appendTo(imgWrapper);
+      } else {
+        var imageList = $('<img/>')
+        .attr({'src': product.imageUrl})
+        .appendTo(imgWrapper);
+      }
 
-      if (arrayOfProducts[i].variantName.trim() != null && arrayOfProducts[i].variantName.trim()) {
+
+      if (product.variantName.trim() != null && product.variantName.trim()) {
         var titleList = $('<span/>')
         .addClass('product_title_with_variant')
-        .text(arrayOfProducts[i].productName)
+        .text(product.productName)
         .appendTo(container);
 
         var variantName = $("<span/>")
         .addClass('variantName')
-        .text(arrayOfProducts[i].variantName)
+        .text(product.variantName)
         .appendTo(container);
 
       } else {
         var titleList = $('<span/>')
         .addClass('product_title')
-        .text(arrayOfProducts[i].productName)
+        .text(product.productName)
         .appendTo(container);
       }
 
-      var priceList = $('<span/>')
-      .addClass('product_price')
-      .text(arrayOfProducts[i].productPrice)
-      .appendTo(container);
+      if ("VARIANT_FOLDER" == product.productType || "FOLDER" == product.productType) {
 
-    }
-  });
+        var variantArray = product.childProducts.reverse();
+
+        $.each(variantArray, function(index) {
+
+          var variantProduct = product.childProducts[index];
+
+          var variantNamePriceContainer = $('<div />')
+          .addClass('variant_column_container')
+          .appendTo(container);
+
+          console.log("ChildName : " + variantProduct.variantName);
+
+          var calcMarigin;
+          if (index == 0) {
+            calcMarigin = 0;
+          } else {
+            calcMarigin = (index * 160);
+          }
+
+          var nameOfChildProduct;
+          if (variantProduct.variantName == "") {
+            nameOfChildProduct = variantProduct.productName;
+            console.log("CHILD PRODUCT NAME: INSIDE  " + JSON.stringify(variantProduct));
+          } else {
+            nameOfChildProduct = variantProduct.variantName;
+          }
+
+          console.log("CHILD PRODUCT NAME:  " + nameOfChildProduct);
+
+          console.log("New margin title " + calcMarigin);
+          var variantNameColumn = $('<span />')
+          .addClass('variant_name_right')
+          .text(nameOfChildProduct)
+          .appendTo(variantNamePriceContainer);
+          variantNameColumn.css({
+            'right': calcMarigin + 'px',
+          });
+
+          var calcMarigin;
+          if (index == 0) {
+            calcMarigin = 20;
+          } else {
+            calcMarigin = (index * 170);
+          }
+
+          var variantPriceColumn = $('<span />')
+          .addClass('variant_price_right')
+          .text(variantProduct.productPrice)
+          .appendTo(variantNamePriceContainer);
+          variantPriceColumn.css({
+            'right': calcMarigin + 'px',
+          })
+
+        });
+
+} else {
+  var priceList = $('<span/>')
+  .addClass('product_price')
+  .text(product.productPrice)
+  .appendTo(container);
+}
+}
+});
 }
 
 function getCastMessageBus() {

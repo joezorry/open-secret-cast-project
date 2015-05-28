@@ -22,7 +22,9 @@ window.onload = function() {
     var numberOfPages = arrayOfProducts.length % 7;
     console.log("numberOfPages " + numberOfPages);
     initListWithArrayOfProducts(arrayOfProducts, 1);
-    showPage(arrayOfProducts, 2);
+    if (numberOfPages >= 2) {
+      showPage(arrayOfProducts, 2);
+    }
 
     window.messageBus.send(event.senderId, event.data);
   }

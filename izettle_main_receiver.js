@@ -31,18 +31,22 @@ window.onload = function() {
   window.castReceiverManager.start({statusText: "Application is starting"});
   console.log('Receiver Manager started'); */
 
+  
+
   //For testing internally
   var arrayOfProducts = mapJsonStringToIzettleProduct(getDummyJsonString());
+
+  var numberOfPages = arrayOfProducts.length % 7;
+  
+  console.log("numberOfPages " + numberOfPages);
+
   initListWithArrayOfProducts(arrayOfProducts, 1);
   showPage(arrayOfProducts, 2);
-
-  $('.product_list')
-  .delay('3000')
-  .queue(function() {
-    console.log("ShowPage");
-    showPage(arrayOfProducts, 1);
-  });
 };
+
+var currentPage = 1;
+var numberOfPages = 0;
+var arrayOfProducts;
 
 // utility function to display the text message in the input field
 function displayText(text) {
@@ -56,7 +60,7 @@ function showPage(arrayOfProducts, showPage) {
   console.log("ShowPage called " + showPage);
 
   $('.product_list')
-  .delay('400')
+  .delay('10000')
   .slideUp('500', function() {
     console.log("Remove");
     $('.product_list_item').detach();
@@ -64,8 +68,18 @@ function showPage(arrayOfProducts, showPage) {
   })
   .slideDown('500', function() {
     console.log("add");
+    pageSwitcher(arrayOfProducts);
   });
+}
 
+function pageSwitcher(arrayOfProducts) {
+  if (currentPage < numberOfPages) {
+    currentPage = currentPage + 1;
+    console.log("CurrentPage " + currentPage);
+  } else {
+    currentPage = 1;
+  }
+  showPage(arrayOfProducts, 1);
 }
 
 function initListWithArrayOfProducts(arrayOfProducts, page) {

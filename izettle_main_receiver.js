@@ -22,7 +22,7 @@ window.onload = function() {
     var numberOfPages = arrayOfProducts.length % 7;
     console.log("numberOfPages " + numberOfPages);
     initListWithArrayOfProducts(arrayOfProducts, 1);
-    if (numberOfPages =< 2) {
+    if (numberOfPages <= 2) {
       showPage(arrayOfProducts, 2);
     }
 

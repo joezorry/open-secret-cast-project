@@ -1,5 +1,5 @@
 window.onload = function() {
- cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
+ /* cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
  cast.receiver.logger.setLevelValue(0);
  window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
  console.log('Starting Receiver Manager');
@@ -25,11 +25,11 @@ window.onload = function() {
 
   // initialize the CastReceiverManager with an application status message
   window.castReceiverManager.start({statusText: "Application is starting"});
-  console.log('Receiver Manager started'); 
+  console.log('Receiver Manager started');  */
 
   //For testing internally
-  //var arrayOfProducts = $.parseJSON(getDummyJsonString()).products;
-  //setupList(arrayOfProducts);
+  var arrayOfProducts = $.parseJSON(getDummyJsonString()).products;
+  setupList(arrayOfProducts);
 };
 
 var MAX_NUM_OF_PRODUCTS_ON_ONE_PAGE = 6;

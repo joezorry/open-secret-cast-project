@@ -1,5 +1,5 @@
 window.onload = function() {
- /* cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
+ cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
  cast.receiver.logger.setLevelValue(0);
  window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
  console.log('Starting Receiver Manager');
@@ -17,31 +17,29 @@ window.onload = function() {
     // inform all senders on the CastMessageBus of the incoming message event
     // sender message listener will be invoked
 
-    var arrayOfProducts = mapJsonStringToIzettleProduct(getDummyJsonString());
     var arrayOfProducts = $.parseJSON(event.data).products;
-    initListWithArrayOfProducts(arrayOfProducts);
-
-    // display the message from the sender
-    displayText(event.data);
+    
+    var numberOfPages = arrayOfProducts.length % 7;
+    console.log("numberOfPages " + numberOfPages);
+    initListWithArrayOfProducts(arrayOfProducts, 1);
+    showPage(arrayOfProducts, 2);
 
     window.messageBus.send(event.senderId, event.data);
   }
 
   // initialize the CastReceiverManager with an application status message
   window.castReceiverManager.start({statusText: "Application is starting"});
-  console.log('Receiver Manager started'); */
+  console.log('Receiver Manager started');
 
   
 
   //For testing internally
-  var arrayOfProducts = mapJsonStringToIzettleProduct(getDummyJsonString());
-
-  var numberOfPages = arrayOfProducts.length % 7;
+  /*var arrayOfProducts = mapJsonStringToIzettleProduct(getDummyJsonString());
   
+  var numberOfPages = arrayOfProducts.length % 7;
   console.log("numberOfPages " + numberOfPages);
-
   initListWithArrayOfProducts(arrayOfProducts, 1);
-  showPage(arrayOfProducts, 2);
+  showPage(arrayOfProducts, 2);*/
 };
 
 var currentPage = 1;

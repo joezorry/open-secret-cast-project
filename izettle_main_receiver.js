@@ -33,15 +33,15 @@ window.onload = function() {
   window.castReceiverManager.start({statusText: "Application is starting"});
   console.log('Receiver Manager started');
 
-  
+  /*
 
   //For testing internally
-  /*var arrayOfProducts = mapJsonStringToIzettleProduct(getDummyJsonString());
+  var arrayOfProducts = mapJsonStringToIzettleProduct(getDummyJsonString());
   
   var numberOfPages = arrayOfProducts.length % 7;
   console.log("numberOfPages " + numberOfPages);
   initListWithArrayOfProducts(arrayOfProducts, 1);
-  showPage(arrayOfProducts, 2);*/
+  showPage(arrayOfProducts, 2); */
 };
 
 var currentPage = 1;
